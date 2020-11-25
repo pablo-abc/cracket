@@ -1,5 +1,5 @@
 import React, { FC } from 'react'
-import { Box, Text } from 'ink'
+import { Box, Text, useFocus } from 'ink'
 
 export type Coin = {
   id: string
@@ -50,6 +50,8 @@ const Cell: FC<{children: React.ReactNode}> = ({ children }) => {
 }
 
 const CoinRow: FC<Coin & { columns: string[] }> = (props) => {
+  const { isFocused } = useFocus()
+
   const {
     name,
     current_price: price,
@@ -63,6 +65,9 @@ const CoinRow: FC<Coin & { columns: string[] }> = (props) => {
 
   return (
     <Box width="100%">
+      <Text color="cyan">
+        {isFocused ? '> ' : '  '}
+      </Text>
       {columns.includes('name') && <Cell>
         <Text>{name}</Text>
       </Cell>}
@@ -102,6 +107,7 @@ const CoinMarket: FC<CoinMarketProps> = ({ coins, columns }) => {
   return (
     <Box flexDirection="column">
       <Box width="100%">
+        <Text>{'  '}</Text>
         {columns.map(column => !!columnNames[column] && (
           <Cell key={column}><Text bold>{columnNames[column]}</Text></Cell>
         ))}
