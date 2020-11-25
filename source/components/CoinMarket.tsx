@@ -18,12 +18,24 @@ type CoinMarketProps = {
   columns: string[]
 }
 
+function addCommas(num: number | string){
+  const nStr = num.toString()
+  const x = nStr.split('.');
+  let x1 = x[0] as string;
+  const x2 = x.length > 1 ? '.' + x[1] : '';
+  const rgx = /(\d+)(\d{3})/;
+  while (rgx.test(x1)) {
+    x1 = x1.replace(rgx, '$1' + ',' + '$2');
+  }
+  return x1 + x2;
+}
+
 const Percentage: FC<{ children?: number }> = ({ children }) => {
   if (!children) return (<Text>N/A</Text>)
 
   return (
     <Text color={children >= 0 ? 'green' : 'red'}>
-      {children.toFixed(4)}
+      {addCommas(children.toFixed(4))}
     </Text>
   )
 }
@@ -55,7 +67,7 @@ const CoinRow: FC<Coin & { columns: string[] }> = (props) => {
         <Text>{name}</Text>
       </Cell>}
       {columns.includes('price') && <Cell>
-        <Text>${price}</Text>
+        <Text>${addCommas(price)}</Text>
       </Cell>}
       {columns.includes('1h') && <Cell>
         <Percentage>{perc1h}</Percentage>
@@ -67,10 +79,10 @@ const CoinRow: FC<Coin & { columns: string[] }> = (props) => {
         <Percentage>{perc7d}</Percentage>
       </Cell>}
       {columns.includes('volume') && <Cell>
-        <Text>${volume}</Text>
+        <Text>${addCommas(volume)}</Text>
       </Cell>}
       {columns.includes('marketCap') && <Cell>
-        <Text>${marketCap}</Text>
+        <Text>${addCommas(marketCap)}</Text>
       </Cell>}
     </Box>
   )
