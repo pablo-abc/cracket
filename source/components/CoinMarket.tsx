@@ -18,7 +18,9 @@ type CoinMarketProps = {
   columns: string[]
 }
 
-const Percentage: FC<{ children: number }> = ({ children }) => {
+const Percentage: FC<{ children?: number }> = ({ children }) => {
+  if (!children) return (<Text>N/A</Text>)
+
   return (
     <Text color={children >= 0 ? 'green' : 'red'}>
       {children.toFixed(4)}
