@@ -1,11 +1,12 @@
 {
   "name": "cracket",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "license": "MIT",
   "description": "CLI app to keep track of cryptocurrency trends",
   "bin": {
     "cracket": "dist/cli.js"
   },
+  "author": "Pablo Berganza <pablo@berganza.dev>",
   "engines": {
     "node": ">=10"
   },
@@ -16,7 +17,7 @@
     "test": "xo && ava"
   },
   "files": [
-    "dist/cli.js"
+    "dist"
   ],
   "dependencies": {
     "got": "^11.8.0",
