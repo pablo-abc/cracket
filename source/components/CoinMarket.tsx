@@ -1,5 +1,5 @@
-import React, { FC } from 'react';
-import { Box, Text } from 'ink';
+import React, { FC } from 'react'
+import { Box, Text } from 'ink'
 
 export type Coin = {
   id: string
@@ -9,16 +9,19 @@ export type Coin = {
   price_change_percentage_1h_in_currency: number
   price_change_percentage_24h_in_currency: number
   price_change_percentage_7d_in_currency: number
+  total_volume: number
+  market_cap: number
 }
 
 type CoinMarketProps = {
   coins: Coin[]
+  columns: string[]
 }
 
 const Percentage: FC<{ children: number }> = ({ children }) => {
   return (
     <Text color={children >= 0 ? 'green' : 'red'}>
-      {children.toFixed(5)}
+      {children.toFixed(4)}
     </Text>
   )
 }
@@ -29,52 +32,70 @@ const Cell: FC<{children: React.ReactNode}> = ({ children }) => {
     <Box flexGrow={1} flexBasis={0}>
       {children}
     </Box>
-  );
+  )
 }
 
-const CoinRow: FC<Coin> = (props) => {
+const CoinRow: FC<Coin & { columns: string[] }> = (props) => {
   const {
     name,
     current_price: price,
     price_change_percentage_1h_in_currency: perc1h,
     price_change_percentage_24h_in_currency: perc24h,
     price_change_percentage_7d_in_currency: perc7d,
-  } = props;
+    total_volume: volume,
+    market_cap: marketCap,
+    columns,
+  } = props
+
   return (
     <Box width="100%">
-      <Cell>
+      {columns.includes('name') && <Cell>
         <Text>{name}</Text>
-      </Cell>
-      <Cell>
+      </Cell>}
+      {columns.includes('price') && <Cell>
         <Text>${price}</Text>
-      </Cell>
-      <Cell>
+      </Cell>}
+      {columns.includes('1h') && <Cell>
         <Percentage>{perc1h}</Percentage>
-      </Cell>
-      <Cell>
+      </Cell>}
+      {columns.includes('24h') && <Cell>
         <Percentage>{perc24h}</Percentage>
-      </Cell>
-      <Cell>
+      </Cell>}
+      {columns.includes('7d') && <Cell>
         <Percentage>{perc7d}</Percentage>
-      </Cell>
+      </Cell>}
+      {columns.includes('volume') && <Cell>
+        <Text>${volume}</Text>
+      </Cell>}
+      {columns.includes('marketCap') && <Cell>
+        <Text>${marketCap}</Text>
+      </Cell>}
     </Box>
   )
 }
 
-const CoinMarket: FC<CoinMarketProps> = ({ coins }) => {
+const columnNames: { [key: string]: string | undefined } = {
+  name: 'Name',
+  price: 'Price',
+  '1h': '1h',
+  '24h': '24h',
+  '7d': '7d',
+  volume: 'Volume',
+  marketCap: 'Market Cap',
+}
+
+const CoinMarket: FC<CoinMarketProps> = ({ coins, columns }) => {
   return (
     <Box flexDirection="column">
       <Box width="100%">
-        <Cell><Text bold>Name</Text></Cell>
-        <Cell><Text bold>Price</Text></Cell>
-        <Cell><Text bold>1h</Text></Cell>
-        <Cell><Text bold>24h</Text></Cell>
-        <Cell><Text bold>7d</Text></Cell>
+        {columns.map(column => !!columnNames[column] && (
+          <Cell key={column}><Text bold>{columnNames[column]}</Text></Cell>
+        ))}
       </Box>
-      {coins.map(coin => <CoinRow key={coin.id} {...coin} />)}
+      {coins.map(coin => <CoinRow key={coin.id} {...coin} columns={columns} />)}
     </Box>
   )
 }
 
-module.exports = CoinMarket;
-export default CoinMarket;
+module.exports = CoinMarket
+export default CoinMarket

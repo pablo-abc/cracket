@@ -21,6 +21,8 @@
   "dependencies": {
     "got": "^11.8.0",
     "ink": "^3.0.8",
+    "ink-big-text": "^1.2.0",
+    "ink-link": "^2.0.0",
     "ink-spinner": "^4.0.1",
     "meow": "^8.0.0",
     "react": "^16.14.0",
@@ -29,10 +31,10 @@
   "ava": {
     "typescript": {
       "extensions": [
-	"tsx"
+        "tsx"
       ],
       "rewritePaths": {
-	"source/": "dist/"
+        "source/": "dist/"
       }
     }
   },
@@ -45,6 +47,7 @@
   "devDependencies": {
     "@ava/typescript": "^1.1.1",
     "@sindresorhus/tsconfig": "^0.8.0",
+    "@types/ink-big-text": "^1.2.0",
     "@types/react": "^17.0.0",
     "ava": "^3.13.0",
     "chalk": "^4.1.0",

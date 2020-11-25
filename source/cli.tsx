@@ -1,8 +1,8 @@
 #!/usr/bin/env node
-import React from 'react';
-import {render} from 'ink';
-import meow from 'meow';
-import App from './ui';
+import React from 'react'
+import {render} from 'ink'
+import meow from 'meow'
+import App from './ui'
 
 const cli = meow(`
 Usage
@@ -24,8 +24,11 @@ Examples
   flags: {
     perPage: {
       type: 'number'
-    }
+    },
+    columns: {
+      type: 'string',
+    },
   }
-});
+})
 
-render(<App perPage={cli.flags.perPage} />);
+render(<App perPage={cli.flags.perPage} columns={cli.flags.columns} />)
