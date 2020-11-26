@@ -62,7 +62,6 @@ const CoinChart: FC<CoinChartProps> = ({ id, height, view, kind }) => {
     </Text>
   )
 
-  console.log(plotData?.length)
   return (
     <>
     {!!plotData && (
