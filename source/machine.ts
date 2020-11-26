@@ -1,9 +1,15 @@
-import { assign, interpret, Machine } from 'xstate'
+import { assign, interpret, Machine, send } from 'xstate'
 
 interface CracketSchema {
   states: {
     home: {}
     detail: {}
+    help: {
+      states: {
+        home: {}
+        detail: {}
+      }
+    }
   }
 }
 
@@ -14,6 +20,8 @@ type CracketEvent =
   | { type: 'SELECT' }
   | { type: 'NEXT_PAGE' }
   | { type: 'PREV_PAGE' }
+  | { type: 'HELP' }
+  | { type: 'HOME' }
 
 interface CracketContext {
   focused: string
@@ -38,14 +46,34 @@ export const cracketMachine = Machine<CracketContext, CracketSchema, CracketEven
           actions: 'prevPage',
           cond: 'notFirstPage',
         },
-      }
+        HELP: 'help.home',
+      },
     },
     detail: {
       on: {
         BACK: 'home',
+        HELP: 'help.detail',
       }
     },
-  }
+    help: {
+      on: {
+        HOME: 'home',
+        DETAIL: 'detail',
+      },
+      states: {
+        home: {
+          on: {
+            BACK: { actions: 'backHome' },
+          },
+        },
+        detail: {
+          on: {
+            BACK: { actions: 'backDetail' },
+          },
+        },
+      },
+    },
+  },
 }, {
   actions: {
     nextPage: assign({
@@ -62,6 +90,8 @@ export const cracketMachine = Machine<CracketContext, CracketSchema, CracketEven
         return event.focused
       },
     }),
+    backHome: send('HOME'),
+    backDetail: send('DETAIL'),
   },
   guards: {
     notFirstPage: (context) => context.page > 1,

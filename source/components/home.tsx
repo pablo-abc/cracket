@@ -9,6 +9,7 @@ import BigText from 'ink-big-text'
 import Link from 'ink-link'
 import { useService } from '@xstate/react'
 import { cracketService } from '../machine'
+import termSize from 'term-size'
 
 const API = 'https://api.coingecko.com/api/v3/coins/markets'
 
@@ -21,7 +22,10 @@ export type HomeProps = {
   columns?: string
 }
 
-const Home: FC<HomeProps> = ({ perPage = 10, columns = 'name,price,1h,24h,7d,volume,marketCap' }) => {
+
+const Home: FC<HomeProps> = ({ perPage: userPerPage, columns = 'name,price,1h,24h,7d,volume,marketCap' }) => {
+  const { rows } = termSize()
+  const perPage = userPerPage || rows - 15
   const [current] = useService(cracketService)
   const searchParams = useMemo(() => ({
     searchParams: {
