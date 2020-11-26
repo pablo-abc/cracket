@@ -22,6 +22,9 @@ const App: FC<HomeProps> = ({ perPage, columns = 'name,price,1h,24h,7d,volume,ma
       if (key.upArrow) return focusPrevious()
       if (key.downArrow) return focusNext()
     }
+    if (current.matches('detail')) {
+      if (input === 'v') return send({ type: 'VIEW' })
+    }
     if (input === 'q' || key.escape) return send({ type: 'BACK' })
     if (input === '?') return send({ type: 'HELP' })
   })

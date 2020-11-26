@@ -12,8 +12,8 @@ Usage
   $ cracket
 
 Options
-	--per-page  Results per page
-        --columns  Columns to show (name,price,1h,24h,7d,volume,marketCap)
+	--per-page  Fixed results per page
+        --columns  Fixed columns to show (name,price,1h,24h,7d,volume,marketCap)
 
 Usage
   Use the arrow keys to switch page.

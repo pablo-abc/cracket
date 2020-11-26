@@ -15,7 +15,7 @@ type CoinResponse = {
 
 const CoinProperty: FC<{title: string, children: React.ReactNode}> = ({ title, children }) => {
   return (
-    <Box flexDirection="column" flexBasis={1} flexGrow={1} padding={1} borderStyle="bold">
+    <Box flexDirection="column" flexBasis={1} flexGrow={1} borderStyle="bold">
       <Text bold>{title}</Text>
       {children}
     </Box>
@@ -54,6 +54,12 @@ const CoinDetail: FC<{ id: string }> = ({ id }) => {
     price_change_percentage_1h_in_currency: perc1h,
     price_change_percentage_24h_in_currency: perc24h,
     price_change_percentage_7d_in_currency: perc7d,
+    high_24h: high24h,
+    low_24h: low24h,
+    ath,
+    ath_date: athDate,
+    atl,
+    atl_date: atlDate,
     total_volume: volume,
     market_cap: marketCap,
   } = coin
@@ -81,6 +87,23 @@ const CoinDetail: FC<{ id: string }> = ({ id }) => {
         </CoinProperty>
         <CoinProperty title="Market Cap">
           <Text>${addCommas(marketCap)}</Text>
+        </CoinProperty>
+      </Box>
+      <Box>
+        <CoinProperty title="24h high/low">
+          <Text>${addCommas(high24h)} / ${addCommas(low24h)}</Text>
+        </CoinProperty>
+        <CoinProperty title="All time high">
+          <Text>${addCommas(ath)}</Text>
+        </CoinProperty>
+        <CoinProperty title="All time high date">
+          <Text>{new Date(athDate).toLocaleDateString()}</Text>
+        </CoinProperty>
+        <CoinProperty title="All time low">
+          <Text>${addCommas(atl)}</Text>
+        </CoinProperty>
+        <CoinProperty title="All time low date">
+          <Text>{new Date(atlDate).toLocaleDateString()}</Text>
         </CoinProperty>
       </Box>
     </Box>

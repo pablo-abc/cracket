@@ -9,6 +9,7 @@ import Spinner from 'ink-spinner'
 type CoinChartProps = {
   id: string
   height: number
+  view: 'default' | 'daily'
 }
 
 type CoinChartResponse = {
@@ -19,26 +20,29 @@ type CoinChartResponse = {
   }
 }
 
-const CoinChart: FC<CoinChartProps> = ({ id, height }) => {
+const CoinChart: FC<CoinChartProps> = ({ id, height, view }) => {
   const { columns } = termSize()
   const chartApi = `https://api.coingecko.com/api/v3/coins/${id}/market_chart`
   const chartSearchParams = useMemo(() => ({
     searchParams: {
       vs_currency: 'usd',
-      days: 1,
+      days: view === 'default' ? '1' : 'max',
+      interval: view === 'daily' ? 'daily' : undefined,
     },
     responseType: 'json',
-  }), [])
+  }), [view])
   const { data: chartData,
           error: chartError
   } = useSWR<CoinChartResponse>([chartApi, chartSearchParams], got, {
     refreshInterval: 60000,
   })
+  const graphLength = columns * -1 + 15
   const chart = chartData?.body
-  const prices = chart?.prices
-  const slicedPrices = prices?.slice(columns * -1 + 15)
-  const startDate = slicedPrices?.[0]?.[0]
-  const endDate = slicedPrices?.[slicedPrices.length - 1]?.[0]
+  const prices = chart?.prices.slice(graphLength)
+  const volumes = chart?.total_volumes.slice(graphLength)
+  const marketCaps = chart?.market_caps.slice(graphLength)
+  const startDate = prices?.[0]?.[0]
+  const endDate = prices?.[prices.length - 1]?.[0]
 
   if (!!chartError) return (
     <Text color="red">There was an error loading the chart</Text>
@@ -53,21 +57,18 @@ const CoinChart: FC<CoinChartProps> = ({ id, height }) => {
 
   return (
     <>
-    {!!slicedPrices && (
+    {!!prices && !!marketCaps && !!volumes && (
       <Text>
-        {asciichart.plot(
-          slicedPrices.map(price => price[1]),
-          { height },
-        )}
+        {asciichart.plot(prices.map(price => price[1]), { height })}
       </Text>
     )}
-    {!!startDate && !!endDate && !!slicedPrices && (
+    {!!startDate && !!endDate && !!prices && (
       <Box marginX={5} marginTop={1}>
         <Text>
           {new Date(startDate).toLocaleString()}
         </Text>
         <Text>
-          {' '.repeat(slicedPrices.length - 35)}
+          {' '.repeat(prices.length - 35)}
         </Text>
         <Text>
           {new Date(endDate).toLocaleString()}

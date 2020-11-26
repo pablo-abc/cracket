@@ -3,7 +3,12 @@ import { assign, interpret, Machine, send } from 'xstate'
 interface CracketSchema {
   states: {
     home: {}
-    detail: {}
+    detail: {
+      states: {
+        default: {}
+        daily: {}
+      }
+    }
     help: {
       states: {
         home: {}
@@ -22,6 +27,7 @@ type CracketEvent =
   | { type: 'PREV_PAGE' }
   | { type: 'HELP' }
   | { type: 'HOME' }
+  | { type: 'VIEW' }
 
 interface CracketContext {
   focused: string
@@ -39,7 +45,7 @@ export const cracketMachine = Machine<CracketContext, CracketSchema, CracketEven
     home: {
       on: {
         FOCUS: { target: 'home', actions: 'focus' },
-        SELECT: 'detail',
+        SELECT: 'detail.default',
         NEXT_PAGE: { target: 'home', actions: 'nextPage' },
         PREV_PAGE: {
           target: 'home',
@@ -53,7 +59,19 @@ export const cracketMachine = Machine<CracketContext, CracketSchema, CracketEven
       on: {
         BACK: 'home',
         HELP: 'help.detail',
-      }
+      },
+      states: {
+        default: {
+          on: {
+            VIEW: 'daily',
+          },
+        },
+        daily: {
+          on: {
+            VIEW: 'default',
+          },
+        },
+      },
     },
     help: {
       on: {

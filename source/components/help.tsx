@@ -13,6 +13,7 @@ const homeHelp = [
 ]
 
 const detailHelp = [
+  ['v', 'Switch between default and daily view'],
   ['q or ESC', 'Go back to home screen'],
 ]
 
