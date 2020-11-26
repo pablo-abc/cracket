@@ -2,6 +2,8 @@ import React, { FC, useEffect } from 'react'
 import { Box, Text, useFocus } from 'ink'
 import { useService } from '@xstate/react'
 import { cracketService } from '../machine'
+import { addCommas } from '../utils'
+import Percentage from './percentage'
 
 export type Coin = {
   id: string
@@ -18,28 +20,6 @@ export type Coin = {
 type CoinMarketProps = {
   coins: Coin[]
   columns: string[]
-}
-
-function addCommas(num: number | string){
-  const nStr = num.toString()
-  const x = nStr.split('.');
-  let x1 = x[0] as string;
-  const x2 = x.length > 1 ? '.' + x[1] : '';
-  const rgx = /(\d+)(\d{3})/;
-  while (rgx.test(x1)) {
-    x1 = x1.replace(rgx, '$1' + ',' + '$2');
-  }
-  return x1 + x2;
-}
-
-const Percentage: FC<{ children?: number }> = ({ children }) => {
-  if (!children) return (<Text>N/A</Text>)
-
-  return (
-    <Text color={children >= 0 ? 'green' : 'red'}>
-      {addCommas(children.toFixed(4))}
-    </Text>
-  )
 }
 
 const Cell: FC<{children: React.ReactNode}> = ({ children }) => {

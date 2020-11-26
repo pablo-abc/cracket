@@ -40,7 +40,7 @@ const Home: FC<HomeProps> = ({ perPage: userPerPage, columns = 'name,price,1h,24
   const { data, error } = useSWR<CoinResponse>([API, searchParams], got, { refreshInterval: 5000 })
 
   return (
-    <Box flexDirection="column">
+    <Box height={rows - 1} flexDirection="column">
       <Box justifyContent="center">
         <BigText text="cracket" />
       </Box>
@@ -54,12 +54,13 @@ const Home: FC<HomeProps> = ({ perPage: userPerPage, columns = 'name,price,1h,24
         )}
         {!!data && <CoinMarket coins={data.body} columns={columns.split(',')} />}
       </Box>
-      <Box marginTop={1}>
+      <Spacer />
+      <Box>
         <Text>
           <Text bold>Page: </Text>
           {current.context.page}
           {' '}
-          (Use arrow keys to change page)
+          (Press '?' for help)
         </Text>
         <Spacer />
         <Text bold>
