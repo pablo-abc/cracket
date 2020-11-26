@@ -10,11 +10,13 @@ Powered by [CoinGecko](https://www.coingecko.com/).
 $ npm install --global cracket
 ```
 
-## CLI
+## Usage
 
 By running the cli app without arguments you'll open it with the default behaviour. You can move around using the arrow keys to select a currency or to switch pages. You can also use `Tab` or `Tab+Shift` to select a currency.
 
 By pressing `Return/Enter` when a currency is selected you'll open its detail view which contains some more detailed info and a graph that shows the trends.
+
+You can always type the `?` key in any screen in order to get help on how to navigate.
 
 ```
 $ cracket --help
