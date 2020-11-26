@@ -10,6 +10,7 @@ type CoinChartProps = {
   id: string
   height: number
   view: 'default' | 'daily'
+  kind: 'price' | 'volume' | 'market'
 }
 
 type CoinChartResponse = {
@@ -20,7 +21,7 @@ type CoinChartResponse = {
   }
 }
 
-const CoinChart: FC<CoinChartProps> = ({ id, height, view }) => {
+const CoinChart: FC<CoinChartProps> = ({ id, height, view, kind }) => {
   const { columns } = termSize()
   const chartApi = `https://api.coingecko.com/api/v3/coins/${id}/market_chart`
   const chartSearchParams = useMemo(() => ({
@@ -34,7 +35,7 @@ const CoinChart: FC<CoinChartProps> = ({ id, height, view }) => {
   const { data: chartData,
           error: chartError
   } = useSWR<CoinChartResponse>([chartApi, chartSearchParams], got, {
-    refreshInterval: 60000,
+    refreshInterval: 30000,
   })
   const graphLength = columns * -1 + 15
   const chart = chartData?.body
@@ -43,6 +44,12 @@ const CoinChart: FC<CoinChartProps> = ({ id, height, view }) => {
   const marketCaps = chart?.market_caps.slice(graphLength)
   const startDate = prices?.[0]?.[0]
   const endDate = prices?.[prices.length - 1]?.[0]
+
+  const plotData = kind === 'price'
+                 ? prices
+                 : kind === 'volume'
+                 ? volumes
+                 : marketCaps
 
   if (!!chartError) return (
     <Text color="red">There was an error loading the chart</Text>
@@ -57,9 +64,9 @@ const CoinChart: FC<CoinChartProps> = ({ id, height, view }) => {
 
   return (
     <>
-    {!!prices && !!marketCaps && !!volumes && (
+    {!!plotData && (
       <Text>
-        {asciichart.plot(prices.map(price => price[1]), { height })}
+        {asciichart.plot(plotData.map(plot => plot[1]), { height })}
       </Text>
     )}
     {!!startDate && !!endDate && !!prices && (

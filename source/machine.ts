@@ -5,8 +5,19 @@ interface CracketSchema {
     home: {}
     detail: {
       states: {
-        default: {}
-        daily: {}
+        frequency: {
+          states: {
+            default: {}
+            daily: {}
+          }
+        }
+        kind: {
+          states: {
+            price: {}
+            volume: {}
+            market: {}
+          }
+        }
       }
     }
     help: {
@@ -28,6 +39,7 @@ type CracketEvent =
   | { type: 'HELP' }
   | { type: 'HOME' }
   | { type: 'VIEW' }
+  | { type: 'SWITCH' }
 
 interface CracketContext {
   focused: string
@@ -45,7 +57,7 @@ export const cracketMachine = Machine<CracketContext, CracketSchema, CracketEven
     home: {
       on: {
         FOCUS: { target: 'home', actions: 'focus' },
-        SELECT: 'detail.default',
+        SELECT: 'detail',
         NEXT_PAGE: { target: 'home', actions: 'nextPage' },
         PREV_PAGE: {
           target: 'home',
@@ -56,19 +68,45 @@ export const cracketMachine = Machine<CracketContext, CracketSchema, CracketEven
       },
     },
     detail: {
+      type: 'parallel',
       on: {
         BACK: 'home',
         HELP: 'help.detail',
       },
       states: {
-        default: {
-          on: {
-            VIEW: 'daily',
+        frequency: {
+          initial: 'default',
+          states: {
+            default: {
+              on: {
+                VIEW: 'daily',
+              },
+            },
+            daily: {
+              on: {
+                VIEW: 'default',
+              },
+            },
           },
         },
-        daily: {
-          on: {
-            VIEW: 'default',
+        kind: {
+          initial: 'price',
+          states: {
+            price: {
+              on: {
+                SWITCH: 'volume',
+              },
+            },
+            volume: {
+              on: {
+                SWITCH: 'market',
+              },
+            },
+            market: {
+              on: {
+                SWITCH: 'price',
+              },
+            },
           },
         },
       },

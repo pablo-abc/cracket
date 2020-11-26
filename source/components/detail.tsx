@@ -11,13 +11,18 @@ const Detail: FC<{ id: string }> = ({ id }) => {
   const { rows } = termSize()
   const [current] = useService(cracketService)
 
-  const view = current.matches('detail.default') ? 'default': 'daily'
+  const view = current.matches('detail.frequency.default') ? 'default': 'daily'
+  const kind = current.matches('detail.kind.price')
+             ? 'price'
+             : current.matches('detail.kind.volume')
+             ? 'volume'
+             : 'market'
 
   return (
     <Box flexDirection="column" height={rows - 1}>
       <CoinDetail id={id} />
       <Spacer />
-      <CoinChart view={view} id={id} height={Math.floor(rows / 2) - 5} />
+      <CoinChart view={view} kind={kind} id={id} height={Math.floor(rows / 2) - 5} />
       <Spacer />
       <Box justifyContent="flex-end">
         <Text>
@@ -26,6 +31,8 @@ const Detail: FC<{ id: string }> = ({ id }) => {
           </Text>
           {' '}
           {view}
+          {' '}
+          [{kind}]
           {' '}
           (Press '?' for help)
         </Text>

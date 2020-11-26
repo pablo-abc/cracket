@@ -37,12 +37,15 @@ const Home: FC<HomeProps> = ({ perPage: userPerPage, columns = 'name,price,1h,24
     },
     responseType: 'json',
   }), [current.context.page])
-  const { data, error } = useSWR<CoinResponse>([API, searchParams], got, { refreshInterval: 5000 })
+  const { data, error } = useSWR<CoinResponse>([API, searchParams], got, { refreshInterval: 30000 })
 
   return (
     <Box height={rows - 1} flexDirection="column">
-      <Box justifyContent="center">
+      <Box justifyContent="center" alignItems="flex-end">
         <BigText text="cracket" />
+        <Box paddingBottom={2}>
+          <Text>By Pablo Berganza</Text>
+        </Box>
       </Box>
       <Box flexDirection="column" height={perPage + 1}>
         {!!error && <Text color="red">There was an error</Text>}

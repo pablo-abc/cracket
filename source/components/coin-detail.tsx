@@ -35,7 +35,7 @@ const CoinDetail: FC<{ id: string }> = ({ id }) => {
     data: coinData,
     error: coinError
   } = useSWR<CoinResponse>([COIN_API, coinSearchParams], got, {
-    refreshInterval: 60000,
+    refreshInterval: 30000,
   })
   const coin = coinData?.body[0]
 

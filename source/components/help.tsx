@@ -14,6 +14,7 @@ const homeHelp = [
 
 const detailHelp = [
   ['v', 'Switch between default and daily view'],
+  ['s', 'Switch between prices, total volumes, market caps'],
   ['q or ESC', 'Go back to home screen'],
 ]
 
