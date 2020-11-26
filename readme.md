@@ -38,3 +38,15 @@ $ cracket --help
     Name      Price     1h        24h       7d
     Bitcoin   $18929.9  -0.34865  -1.03432  7.24047
 ```
+
+## Libraries
+
+This app uses the following libraries:
+
+- [Ink](https://github.com/vadimdemedes/ink) - Build CLI apps using React and Node.js
+- [React](https://reactjs.org] - A JavScript library for building user interfaces
+- [xstate](https://xstate.js.org) - State machines in JavaScript
+- [got](https://github.com/sindresorhus/got) - HTTP request library
+- [swr](https://swr.vercel.app/) - React hooks library for data fetching
+- [asciichart](https://github.com/kroitor/asciichart) - Create ASCII line charts in pure JavaScript
+- [term-size](https://github.com/sindresorhus/term-size) - Get terminal size

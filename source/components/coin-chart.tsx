@@ -1,5 +1,5 @@
 import React, { FC, useMemo } from 'react'
-import { Box, Text } from 'ink'
+import { Box, Text, Spacer } from 'ink'
 import * as asciichart from 'asciichart'
 import termSize from 'term-size'
 import got from 'got'
@@ -37,7 +37,7 @@ const CoinChart: FC<CoinChartProps> = ({ id, height, view, kind }) => {
   } = useSWR<CoinChartResponse>([chartApi, chartSearchParams], got, {
     refreshInterval: 30000,
   })
-  const graphLength = columns * -1 + 15
+  const graphLength = columns * -1 + 20
   const chart = chartData?.body
   const prices = chart?.prices.slice(graphLength)
   const volumes = chart?.total_volumes.slice(graphLength)
@@ -62,6 +62,7 @@ const CoinChart: FC<CoinChartProps> = ({ id, height, view, kind }) => {
     </Text>
   )
 
+  console.log(plotData?.length)
   return (
     <>
     {!!plotData && (
@@ -69,14 +70,12 @@ const CoinChart: FC<CoinChartProps> = ({ id, height, view, kind }) => {
         {asciichart.plot(plotData.map(plot => plot[1]), { height })}
       </Text>
     )}
-    {!!startDate && !!endDate && !!prices && (
-      <Box marginX={5} marginTop={1}>
+    {!!startDate && !!endDate && !!plotData && (
+      <Box marginLeft={2} marginTop={1} width={plotData.length + 15}>
         <Text>
           {new Date(startDate).toLocaleString()}
         </Text>
-        <Text>
-          {' '.repeat(prices.length - 35)}
-        </Text>
+        <Spacer />
         <Text>
           {new Date(endDate).toLocaleString()}
         </Text>
