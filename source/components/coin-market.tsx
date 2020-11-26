@@ -1,5 +1,7 @@
-import React, { FC } from 'react'
+import React, { FC, useEffect } from 'react'
 import { Box, Text, useFocus } from 'ink'
+import { useService } from '@xstate/react'
+import { cracketService } from '../machine'
 
 export type Coin = {
   id: string
@@ -51,6 +53,11 @@ const Cell: FC<{children: React.ReactNode}> = ({ children }) => {
 
 const CoinRow: FC<Coin & { columns: string[] }> = (props) => {
   const { isFocused } = useFocus()
+  const [, send] = useService(cracketService)
+
+  useEffect(() => {
+    if (isFocused) send({ type: 'FOCUS', focused: props.id })
+  }, [isFocused])
 
   const {
     name,

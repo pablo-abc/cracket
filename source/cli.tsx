@@ -4,6 +4,9 @@ import {render} from 'ink'
 import meow from 'meow'
 import App from './ui'
 
+// @ts-ignore
+global.navigator = {}
+
 const cli = meow(`
 Usage
   $ cracket

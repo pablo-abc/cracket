@@ -20,6 +20,8 @@
     "dist"
   ],
   "dependencies": {
+    "@xstate/react": "^1.0.3",
+    "asciichart": "^1.5.25",
     "got": "^11.8.0",
     "ink": "^3.0.8",
     "ink-big-text": "^1.2.0",
@@ -27,7 +29,9 @@
     "ink-spinner": "^4.0.1",
     "meow": "^8.0.0",
     "react": "^16.14.0",
-    "swr": "^0.3.9"
+    "swr": "^0.3.9",
+    "term-size": "^2.2.1",
+    "xstate": "^4.14.1"
   },
   "ava": {
     "typescript": {
@@ -48,6 +52,7 @@
   "devDependencies": {
     "@ava/typescript": "^1.1.1",
     "@sindresorhus/tsconfig": "^0.8.0",
+    "@types/asciichart": "^1.5.3",
     "@types/ink-big-text": "^1.2.0",
     "@types/react": "^17.0.0",
     "ava": "^3.13.0",
