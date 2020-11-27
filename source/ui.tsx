@@ -25,6 +25,7 @@ const App: FC<HomeProps> = ({ perPage, columns = 'name,price,1h,24h,7d,volume,ma
     if (current.matches('detail')) {
       if (input === 'v') return send({ type: 'VIEW' })
       if (input === 's') return send({ type: 'SWITCH' })
+      if (input === 'g') return send({ type: 'SWITCH_GRAPH' })
     }
     if (input === 'q' || key.escape) return send({ type: 'BACK' })
     if (input === '?') return send({ type: 'HELP' })

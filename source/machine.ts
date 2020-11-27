@@ -5,19 +5,24 @@ interface CracketSchema {
     home: {}
     detail: {
       states: {
-        frequency: {
+        line: {
           states: {
-            default: {}
-            daily: {}
+            frequency: {
+              states: {
+                default: {}
+                daily: {}
+              }
+            }
+            kind: {
+              states: {
+                price: {}
+                volume: {}
+                market: {}
+              }
+            }
           }
         }
-        kind: {
-          states: {
-            price: {}
-            volume: {}
-            market: {}
-          }
-        }
+        ohlc: {}
       }
     }
     help: {
@@ -40,6 +45,7 @@ type CracketEvent =
   | { type: 'HOME' }
   | { type: 'VIEW' }
   | { type: 'SWITCH' }
+  | { type: 'SWITCH_GRAPH' }
 
 interface CracketContext {
   focused: string
@@ -68,43 +74,56 @@ export const cracketMachine = Machine<CracketContext, CracketSchema, CracketEven
       },
     },
     detail: {
-      type: 'parallel',
+      initial: 'line',
       on: {
         BACK: 'home',
         HELP: 'help.detail',
       },
       states: {
-        frequency: {
-          initial: 'default',
-          states: {
-            default: {
-              on: {
-                VIEW: 'daily',
-              },
-            },
-            daily: {
-              on: {
-                VIEW: 'default',
-              },
-            },
+        ohlc: {
+          on: {
+            SWITCH_GRAPH: 'line',
           },
         },
-        kind: {
-          initial: 'price',
+        line: {
+          type: 'parallel',
+          on: {
+            SWITCH_GRAPH: 'ohlc',
+          },
           states: {
-            price: {
-              on: {
-                SWITCH: 'volume',
+            frequency: {
+              initial: 'default',
+              states: {
+                default: {
+                  on: {
+                    VIEW: 'daily',
+                  },
+                },
+                daily: {
+                  on: {
+                    VIEW: 'default',
+                  },
+                },
               },
             },
-            volume: {
-              on: {
-                SWITCH: 'market',
-              },
-            },
-            market: {
-              on: {
-                SWITCH: 'price',
+            kind: {
+              initial: 'price',
+              states: {
+                price: {
+                  on: {
+                    SWITCH: 'volume',
+                  },
+                },
+                volume: {
+                  on: {
+                    SWITCH: 'market',
+                  },
+                },
+                market: {
+                  on: {
+                    SWITCH: 'price',
+                  },
+                },
               },
             },
           },

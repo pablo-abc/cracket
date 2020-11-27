@@ -6,14 +6,14 @@ import got from 'got'
 import useSWR from 'swr'
 import Spinner from 'ink-spinner'
 
-type CoinChartProps = {
+type CoinMarketChartProps = {
   id: string
   height: number
   view: 'default' | 'daily'
   kind: 'price' | 'volume' | 'market'
 }
 
-type CoinChartResponse = {
+type CoinMarketChartResponse = {
   body: {
     prices: [number, number][],
     market_caps: [number, number][],
@@ -21,7 +21,7 @@ type CoinChartResponse = {
   }
 }
 
-const CoinChart: FC<CoinChartProps> = ({ id, height, view, kind }) => {
+const CoinMarketChart: FC<CoinMarketChartProps> = ({ id, height, view, kind }) => {
   const { columns } = termSize()
   const chartApi = `https://api.coingecko.com/api/v3/coins/${id}/market_chart`
   const chartSearchParams = useMemo(() => ({
@@ -34,7 +34,7 @@ const CoinChart: FC<CoinChartProps> = ({ id, height, view, kind }) => {
   }), [view])
   const { data: chartData,
           error: chartError
-  } = useSWR<CoinChartResponse>([chartApi, chartSearchParams], got, {
+  } = useSWR<CoinMarketChartResponse>([chartApi, chartSearchParams], got, {
     refreshInterval: 30000,
   })
   const graphLength = columns * -1 + 20
@@ -84,5 +84,5 @@ const CoinChart: FC<CoinChartProps> = ({ id, height, view, kind }) => {
   )
 }
 
-module.exports = CoinChart
-export default CoinChart
+module.exports = CoinMarketChart
+export default CoinMarketChart
